@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class Order extends PanacheEntity {
 
     private String customerId;

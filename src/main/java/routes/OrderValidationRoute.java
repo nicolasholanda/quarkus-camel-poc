@@ -4,45 +4,30 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import model.dto.SaveOrderDTO;
 import org.apache.camel.builder.RouteBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import repository.OrderRepository;
-
-import static io.opentelemetry.api.internal.StringUtils.isNullOrEmpty;
+import service.OrderService;
 
 
 @ApplicationScoped
 public class OrderValidationRoute extends RouteBuilder {
 
     @Inject
-    private OrderRepository orderRepository;
-
-    Logger logger = LoggerFactory.getLogger(OrderValidationRoute.class);
+    private OrderService orderService;
 
     @Override
     public void configure() {
         from("kafka:order-validation?brokers=localhost:9092")
                 .routeId("order-validation-route")
+                .log("Raw message: ${body}")
                 .unmarshal().json(SaveOrderDTO.class)
-                .process(exchange -> {
-                    SaveOrderDTO saveOrderDTO = exchange.getIn().getBody(SaveOrderDTO.class);
-                    logger.info("Received order for validation: {}", saveOrderDTO.customerId());
-                    processOrder(saveOrderDTO);
-                });
-    }
-
-    private void processOrder(SaveOrderDTO saveOrderDTO) {
-        if(!isValidOrder(saveOrderDTO)) {
-            logger.warn("This order is not valid: {}", saveOrderDTO);
-            return;
-        }
-
-        logger.info("Persisting valid order: {}", saveOrderDTO);
-        orderRepository.saveOrder(saveOrderDTO);
-    }
-
-    private boolean isValidOrder(SaveOrderDTO saveOrderDTO) {
-        return !(isNullOrEmpty(saveOrderDTO.customerId()) ||
-                saveOrderDTO.totalAmount() < 0);
+                .log("Received order: ${body}")
+                .choice()
+                    .when(method(orderService, "isValidOrder"))
+                        .log("Sending order to valid-order topic: ${body}")
+                        .marshal().json()
+                        .to("kafka:valid-order?brokers=localhost:9092")
+                    .otherwise()
+                        .log("Sending order to invalid-order topic: ${body}")
+                        .marshal().json()
+                        .to("kafka:invalid-order?brokers=localhost:9092");
     }
 }
