@@ -19,8 +19,6 @@ public class OrderResource {
     Emitter<SaveOrderDTO> orderValidationEmitter;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = MediaType.TEXT_PLAIN)
     public Response save(SaveOrderDTO saveOrderDTO) {
         orderValidationEmitter.send(saveOrderDTO);
         return Response.accepted().entity("Order received.").build();
