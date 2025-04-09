@@ -25,6 +25,7 @@ public class ValidOrderRoute extends RouteBuilder {
                     Order persistedOrder = orderService.save(orderDTO);
                     exchange.getIn().setBody(persistedOrder);
                 })
-                .log("Persisted order: ${body}");
+                .log("Persisted order: ${body}")
+                .to("vertx-websocket:/orders-notification?sendToAll=true");
     }
 }

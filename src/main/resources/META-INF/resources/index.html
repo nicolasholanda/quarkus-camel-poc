@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+    <title>Create Order</title>
+</head>
+<body>
+<h2>Create Order</h2>
+<form id="orderForm">
+    <label for="customerId">Customer ID:</label>
+    <input type="text" id="customerId" name="customerId" required><br><br>
+
+    <label for="totalAmount">Total Amount:</label>
+    <input type="number" id="totalAmount" name="totalAmount" step="0.01" required><br><br>
+
+    <button type="submit">Submit Order</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const customerId = document.getElementById('customerId').value;
+      const totalAmount = document.getElementById('totalAmount').value;
+
+      const response = await fetch('/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId, totalAmount })
+      });
+
+      const text = await response.text();
+      document.getElementById('response').textContent = text;
+    });
+
+    const ws = new WebSocket("ws://localhost:8080/orders-notification");
+
+    ws.onmessage = (event) => {
+      alert("Order created: " + event.data);
+    };
+
+    ws.onopen = () => console.log("WebSocket connected.");
+</script>
+</body>
+</html>
