@@ -1,4 +1,4 @@
-package routes;
+package com.github.nicolasholanda.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 

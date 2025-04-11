@@ -1,10 +1,10 @@
-package rest;
+package com.github.nicolasholanda.rest;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import model.dto.SaveOrderDTO;
+import com.github.nicolasholanda.model.dto.SaveOrderDTO;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 

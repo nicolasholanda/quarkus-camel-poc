@@ -1,4 +1,4 @@
-package model.dto;
+package com.github.nicolasholanda.model.dto;
 
 public record SaveOrderDTO(
     String customerId,

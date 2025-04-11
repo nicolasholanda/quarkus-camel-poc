@@ -1,10 +1,10 @@
-package service;
+package com.github.nicolasholanda.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import model.Order;
-import model.dto.SaveOrderDTO;
-import repository.OrderRepository;
+import com.github.nicolasholanda.model.Order;
+import com.github.nicolasholanda.model.dto.SaveOrderDTO;
+import com.github.nicolasholanda.repository.OrderRepository;
 
 import static io.opentelemetry.api.internal.StringUtils.isNullOrEmpty;
 

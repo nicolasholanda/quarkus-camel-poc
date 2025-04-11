@@ -1,9 +1,9 @@
-package repository;
+package com.github.nicolasholanda.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import model.Order;
-import model.dto.SaveOrderDTO;
+import com.github.nicolasholanda.model.Order;
+import com.github.nicolasholanda.model.dto.SaveOrderDTO;
 
 @ApplicationScoped
 public class OrderRepository {

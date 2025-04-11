@@ -1,10 +1,10 @@
-package routes;
+package com.github.nicolasholanda.routes;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import model.dto.SaveOrderDTO;
+import com.github.nicolasholanda.model.dto.SaveOrderDTO;
 import org.apache.camel.builder.RouteBuilder;
-import service.OrderService;
+import com.github.nicolasholanda.service.OrderService;
 
 
 @ApplicationScoped
