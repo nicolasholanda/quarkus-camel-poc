@@ -28,6 +28,7 @@ public class ValidOrderRoute extends RouteBuilder {
                 .log("Raw message: ${body}")
                 .unmarshal().json(SaveOrderDTO.class)
                 .log("Received order: ${body}")
+                .delay(2000)
                 .process(exchange -> {
                     SaveOrderDTO orderDTO = exchange.getIn().getBody(SaveOrderDTO.class);
                     Order persistedOrder = orderService.save(orderDTO);
