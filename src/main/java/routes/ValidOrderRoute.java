@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import model.Order;
 import model.dto.SaveOrderDTO;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import service.OrderService;
 
@@ -15,6 +16,13 @@ public class ValidOrderRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        errorHandler(
+            deadLetterChannel("kafka:dlq-orders?brokers=localhost:9092")
+                    .maximumRedeliveries(3)
+                    .redeliveryDelay(2000)
+                    .retryAttemptedLogLevel(LoggingLevel.WARN)
+        );
+
         from("kafka:valid-order?brokers=localhost:9092")
                 .routeId("valid-order-route")
                 .log("Raw message: ${body}")
